@@ -37,12 +37,15 @@ jobs:
       - name: Include CNAME for custom domain (if present in repo)
         if: always()
         run: |
-          # prefer repo-root CNAME, then frontend/public/CNAME
+          # prefer repo-root CNAME, then .github/CNAME, then frontend/public/CNAME
           set -e
           OUT_DIR=frontend/out
           if [ -f CNAME ]; then
             cp CNAME "$OUT_DIR/CNAME"
             echo "Using CNAME from repo root"
+          elif [ -f .github/CNAME ]; then
+            cp .github/CNAME "$OUT_DIR/CNAME"
+            echo "Using CNAME from .github/CNAME"
           elif [ -f frontend/public/CNAME ]; then
             cp frontend/public/CNAME "$OUT_DIR/CNAME"
             echo "Using CNAME from frontend/public/CNAME"
