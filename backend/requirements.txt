@@ -1,0 +1,11 @@
+djangorestframework
+
+# Pin Django to 4.2 LTS for local compatibility
+Django~=4.2
+djangorestframework
+psycopg2-binary
+django-cors-headers
+djangorestframework-simplejwt
+python-dotenv
+gunicorn
+dj-database-url

@@ -1,0 +1,18 @@
+[
+  {
+    "name": "Jon Doe",
+    "weight_class": "Lightweight",
+    "reach": 72,
+    "stance": "Orthodox",
+    "record": "20-2-0",
+    "image_url": ""
+  },
+  {
+    "name": "Max Power",
+    "weight_class": "Welterweight",
+    "reach": 74,
+    "stance": "Southpaw",
+    "record": "18-4-0",
+    "image_url": ""
+  }
+]
