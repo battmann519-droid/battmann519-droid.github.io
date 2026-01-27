@@ -4,11 +4,6 @@ on:
   push:
     branches: [ main ]
   workflow_dispatch:
-    inputs:
-      custom_domain:
-        description: 'Optional custom domain to write to CNAME (overrides secret)'
-        required: false
-        default: ''
 
 jobs:
   export-and-deploy:
@@ -39,32 +34,21 @@ jobs:
         run: touch out/.nojekyll
         working-directory: frontend
 
-      - name: Include CNAME for custom domain (if present)
+      - name: Include CNAME for custom domain (if present in repo)
         if: always()
         run: |
-          # prefer repo-root CNAME, then frontend/public/CNAME, then workflow input, then secret
+          # prefer repo-root CNAME, then frontend/public/CNAME
           set -e
           OUT_DIR=frontend/out
-          WORKFLOW_DOMAIN="${GITHUB_INPUT_CUSTOM_DOMAIN:-}"
-          SECRET_DOMAIN="${PAGES_CUSTOM_DOMAIN:-}"
           if [ -f CNAME ]; then
             cp CNAME "$OUT_DIR/CNAME"
             echo "Using CNAME from repo root"
           elif [ -f frontend/public/CNAME ]; then
             cp frontend/public/CNAME "$OUT_DIR/CNAME"
             echo "Using CNAME from frontend/public/CNAME"
-          elif [ -n "$WORKFLOW_DOMAIN" ]; then
-            echo "$WORKFLOW_DOMAIN" > "$OUT_DIR/CNAME"
-            echo "Using CNAME from workflow input"
-          elif [ -n "$SECRET_DOMAIN" ]; then
-            echo "$SECRET_DOMAIN" > "$OUT_DIR/CNAME"
-            echo "Using CNAME from secret"
           else
-            echo "No CNAME provided; skipping"
+            echo "No CNAME in repo; skipping"
           fi
-        env:
-          GITHUB_INPUT_CUSTOM_DOMAIN: ${{ github.event.inputs.custom_domain }}
-          PAGES_CUSTOM_DOMAIN: ${{ secrets.PAGES_CUSTOM_DOMAIN }}
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v1
