@@ -126,10 +126,8 @@ function MyTeamContent() {
         {teams.length ? (
           teams.map((t) => <TeamCard key={t.id} team={t} />)
         ) : (
-          <div>
-            <p className="text-slate-500">No teams found. Create or join a league to make a team.</p>
-            <div className="mt-4">
-              <label className="block text-sm">Create team for league</label>
+                </div>
+      {loading && <p className="mt-4">Loading teams...</p>}
               <select className="w-full border rounded px-3 py-2 mt-2" value={selectedLeague ?? ''} onChange={(e) => setSelectedLeague(Number(e.target.value))}>
                 <option value="">Select a league</option>
                 {leagues.map((l) => (
