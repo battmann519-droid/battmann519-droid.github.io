@@ -7,7 +7,8 @@ __pycache__/
 
 # Node
 node_modules/
-.next/
+# allow .next to be committed by CI (we'll commit built artifacts)
+!.next/
 
 # macOS
 .DS_Store
