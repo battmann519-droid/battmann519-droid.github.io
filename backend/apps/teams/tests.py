@@ -1,4 +1,6 @@
 from django.test import TestCase
+from rest_framework.test import APIClient
+from rest_framework_simplejwt.tokens import RefreshToken
 from django.conf import settings
 from django.urls import reverse
 from apps.accounts.models import User
@@ -10,6 +12,9 @@ class TeamRosterTests(TestCase):
     def setUp(self):
         self.user = User.objects.create_user(username='tester', password='pass')
         self.league = League.objects.create(name='Test League', owner=self.user)
+        self.client = APIClient()
+        refresh = RefreshToken.for_user(self.user)
+        self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {str(refresh.access_token)}')
         # create fighters
         self.fighters = []
         for i in range(10):
@@ -17,7 +22,7 @@ class TeamRosterTests(TestCase):
             self.fighters.append(f)
 
     def test_team_creation_exceeds_roster(self):
-        self.client.login(username='tester', password='pass')
+        # authenticated via JWT token set in setUp
         max_roster = getattr(settings, 'TEAM_MAX_ROSTER', 5)
         fighter_ids = [f.id for f in self.fighters[: max_roster + 1]]
         url = reverse('teams-create')
@@ -26,7 +31,7 @@ class TeamRosterTests(TestCase):
         self.assertIn('Max roster size', resp.json().get('detail', '') or str(resp.json()))
 
     def test_team_creation_within_roster(self):
-        self.client.login(username='tester', password='pass')
+        # authenticated via JWT token set in setUp
         max_roster = getattr(settings, 'TEAM_MAX_ROSTER', 5)
         fighter_ids = [f.id for f in self.fighters[: max_roster]]
         url = reverse('teams-create')
@@ -34,4 +39,3 @@ class TeamRosterTests(TestCase):
         self.assertIn(resp.status_code, (200, 201))
         data = resp.json()
         self.assertIn('id', data)
-*** End Patch
