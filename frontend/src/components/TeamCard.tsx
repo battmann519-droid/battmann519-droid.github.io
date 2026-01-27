@@ -18,7 +18,7 @@ export default function TeamCard({ team }: { team: Team }) {
       <div className="flex items-center justify-between">
         <div>
           <h3 className="font-semibold">Team #{team.id}</h3>
-          <p className="text-sm text-slate-500">Owner: {typeof team.user === 'string' ? team.user : team.user.username}</p>
+          <p className="text-sm text-slate-500">Owner: {team.user}</p>
         </div>
       </div>
 
