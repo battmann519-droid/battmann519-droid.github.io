@@ -61,6 +61,17 @@ jobs:
             echo "No CNAME in repo; skipping"
           fi
 
+      - name: Add deployment diagnostic file
+        if: always()
+        run: |
+          OUT_DIR=frontend/out
+          mkdir -p "$OUT_DIR"
+          echo "Deployed from commit: $GITHUB_SHA" > "$OUT_DIR/DEPLOY_INFO.txt"
+          echo "Repository: $GITHUB_REPOSITORY" >> "$OUT_DIR/DEPLOY_INFO.txt"
+          echo "Run ID: $GITHUB_RUN_ID" >> "$OUT_DIR/DEPLOY_INFO.txt"
+          echo "Timestamp: $(date -u +"%Y-%m-%dT%H:%M:%SZ")" >> "$OUT_DIR/DEPLOY_INFO.txt"
+          echo "Wrote $OUT_DIR/DEPLOY_INFO.txt"
+
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v1
         with:
