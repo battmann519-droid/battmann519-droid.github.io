@@ -7,7 +7,7 @@ type Fighter = {
 
 type Team = {
   id: number
-  user: string
+  user: string | { username?: string }
   league: number | { id: number; name?: string }
   fighters: Fighter[]
 }
