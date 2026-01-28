@@ -1,0 +1,37 @@
+name: Check upload-artifact usage
+
+on:
+  workflow_dispatch:
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Search workflows for upload-artifact
+        run: |
+          echo "Searching .github/workflows for upload-artifact occurrences"
+          grep -R --line-number "upload-artifact@" .github/workflows || true
+
+      - name: Print matching files
+        run: |
+          for f in $(grep -RIl "upload-artifact@" .github/workflows || true); do
+            echo "---- $f ----"
+            sed -n '1,200p' "$f" || true
+          done
+
+      - name: Create small test artifact
+        run: |
+          echo "artifact: diagnostic" > test-artifact.txt
+
+      - name: Upload test artifact (v4)
+        uses: actions/upload-artifact@v4
+        with:
+          name: diagnostic-artifact
+          path: test-artifact.txt
+
+      - name: Note
+        run: |
+          echo "If any workflow shows 'upload-artifact@v3' in the earlier output, update it to v4." 
