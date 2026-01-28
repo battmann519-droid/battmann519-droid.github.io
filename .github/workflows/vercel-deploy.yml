@@ -9,7 +9,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     # Only run if Vercel secrets are configured
-    if: ${{ secrets.VERCEL_TOKEN != '' }}
+    if: secrets.VERCEL_TOKEN != ''
     steps:
       - name: Checkout
         uses: actions/checkout@v4
