@@ -27,7 +27,15 @@ jobs:
         working-directory: frontend
 
       - name: Build and export static site
-        run: npm run export
+        run: |
+          echo "CI build: NEXT_PUBLIC_API_URL='${{ secrets.NEXT_PUBLIC_API_URL }}'"
+          if [ -z "${{ secrets.NEXT_PUBLIC_API_URL }}" ]; then
+            echo "Warning: NEXT_PUBLIC_API_URL is not set in repository secrets. The exported site may point to localhost or be unable to reach your API."
+          fi
+          export NEXT_PUBLIC_API_URL="${{ secrets.NEXT_PUBLIC_API_URL }}"
+          npm run export
+          # create pretty-route folders for Pages (so /fighters works)
+          bash ../scripts/make_spa_folders.sh || true
         working-directory: frontend
 
       - name: Ensure .nojekyll (prevent GitHub Pages from ignoring files)
