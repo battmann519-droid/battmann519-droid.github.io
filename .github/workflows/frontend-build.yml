@@ -14,6 +14,18 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Diagnostic: list action usages and artifact references
+        run: |
+          echo "--- WORKFLOWS uses: ---"
+          grep -R --line-number "uses:" .github/workflows || true
+          echo "\n--- artifact action occurrences: ---"
+          grep -R --line-number "upload-artifact@\|download-artifact@" .github/workflows || true
+          echo "\n--- Run info ---"
+          echo "GITHUB_REPOSITORY=$GITHUB_REPOSITORY"
+          echo "GITHUB_REF=$GITHUB_REF"
+          echo "GITHUB_SHA=$GITHUB_SHA"
+          echo "GITHUB_RUN_ID=$GITHUB_RUN_ID"
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
