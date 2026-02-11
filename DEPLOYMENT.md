@@ -1,7 +1,9 @@
-Vercel deployment
+Vercel deployment (Optional)
 =================
 
-This repository contains a Next.js frontend in `frontend/`. To deploy it automatically to Vercel from GitHub, follow these steps:
+This repository contains a Next.js frontend in `frontend/`. By default, the site deploys to GitHub Pages via the `static-export.yml` workflow. 
+
+To optionally deploy to Vercel from GitHub, follow these steps:
 
 1. Create a Vercel project and link it to this GitHub repository (recommended) or create a new project in the Vercel dashboard.
 
@@ -10,7 +12,7 @@ This repository contains a Next.js frontend in `frontend/`. To deploy it automat
    - `VERCEL_ORG_ID` — the Vercel organization id for the project (found in the project dashboard URL or Vercel settings)
    - `VERCEL_PROJECT_ID` — the Vercel project id (found in the project settings)
 
-3. The workflow `.github/workflows/vercel-deploy.yml` will run on push to `main` and on manual dispatch; it uses the `frontend` folder as the working directory and deploys with `--prod`.
+3. Once the secrets are configured, the workflow `.github/workflows/vercel-deploy.yml` will automatically run on push to `main` and on manual dispatch; it uses the `frontend` folder as the working directory and deploys with `--prod`.
 
 4. If you prefer to deploy locally with the Vercel CLI, run these commands:
 
@@ -22,5 +24,7 @@ vercel --prod
 
 Notes
 -----
+- The Vercel workflow is configured to skip deployment if the required secrets are not set, preventing build failures.
 - The workflow uses `amondnet/vercel-action@v20`. If you prefer another action or direct `vercel` CLI usage, adjust the workflow accordingly.
 - For App Router Next.js projects, Vercel is the recommended host (automatic optimizations, SSR support).
+- GitHub Pages deployment via static export is the default deployment method and doesn't require additional configuration.
